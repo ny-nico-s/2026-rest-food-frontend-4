@@ -7,4 +7,5 @@ export const PATHS = {
   menu: '/menu',
   cart: '/cart',
   checkout: '/checkout',
+  apiTest: '/api-test',
 } as const

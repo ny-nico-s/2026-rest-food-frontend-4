@@ -5,6 +5,7 @@ import HomePage from '../pages/HomePage'
 import MenuPage from '../pages/MenuPage'
 import CartPage from '../pages/CartPage'
 import CheckoutPage from '../pages/CheckoutPage'
+import ApiTestPage from '../pages/ApiTestPage'
 import { PATHS } from './paths'
 
 /**
@@ -19,6 +20,8 @@ function AppRoutes() {
         <Route path={PATHS.menu} element={<MenuPage />} />
         <Route path={PATHS.cart} element={<CartPage />} />
         <Route path={PATHS.checkout} element={<CheckoutPage />} />
+        {/* Teil 1: Testseite zur Prüfung der API-Anbindung (GET /menu) */}
+        <Route path={PATHS.apiTest} element={<ApiTestPage />} />
       </Route>
     </Routes>
   )
