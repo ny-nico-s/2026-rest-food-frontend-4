@@ -1,8 +1,7 @@
-import Typography from '@mui/material/Typography'
+import HeroSection from '../components/organisms/HeroSection/HeroSection'
 
-/** Seite: Startseite. Inhalt folgt in Teil 2. */
 function HomePage() {
-  return <Typography variant="h4">Home</Typography>
+  return <HeroSection />
 }
 
 export default HomePage

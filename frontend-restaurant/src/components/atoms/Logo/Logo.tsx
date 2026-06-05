@@ -1,26 +1,26 @@
-import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 import { Link as RouterLink } from 'react-router-dom'
 import { PATHS } from '../../../routes/paths'
+import logo from '../../../assets/logo.png'
 
-/**
- * Atom: Text-Logo des Restaurants.
- * Klick führt zur Startseite. Bild-Logo später hier ersetzbar.
- */
 function Logo() {
   return (
-    <Typography
-      variant="h6"
+    <Box
       component={RouterLink}
       to={PATHS.home}
-      sx={{
-        fontWeight: 700,
-        letterSpacing: 1,
-        color: 'inherit',
-        textDecoration: 'none',
-      }}
+      sx={{ display: 'flex', alignItems: 'center' }}
     >
-      Rest-Food
-    </Typography>
+      <Box
+        component="img"
+        src={logo}
+        alt="Rest-Food"
+        sx={{
+          height: 48,
+          width: 48,
+          display: 'block',
+        }}
+      />
+    </Box>
   )
 }
 

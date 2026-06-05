@@ -13,21 +13,19 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import Logo from '../../atoms/Logo/Logo'
 import NavLinks from '../../molecules/NavLinks/NavLinks'
-import CartButton from '../../molecules/CartButton/CartButton'
 import { PATHS } from '../../../routes/paths'
 
-/**
- * Organism: obere Navigationsleiste.
- * Desktop: Links sichtbar. Mobil: Links im Drawer hinter dem Menü-Icon.
- */
 function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   return (
-    <AppBar position="sticky" color="primary" elevation={1}>
+    <AppBar
+      position="sticky"
+      elevation={1}
+      sx={{ bgcolor: 'common.white', color: 'text.primary' }}
+    >
       <Container maxWidth="lg">
         <Toolbar disableGutters sx={{ gap: 2 }}>
-          {/* Menü-Icon nur auf kleinen Bildschirmen */}
           <IconButton
             color="inherit"
             aria-label="Navigation öffnen"
@@ -40,19 +38,14 @@ function Header() {
 
           <Logo />
 
-          {/* Links nur auf großen Bildschirmen */}
           <Box sx={{ display: { xs: 'none', md: 'flex' }, ml: 2 }}>
             <NavLinks />
           </Box>
 
-          {/* schiebt den Warenkorb nach rechts */}
           <Box sx={{ flexGrow: 1 }} />
-
-          <CartButton />
         </Toolbar>
       </Container>
 
-      {/* Mobile Navigation */}
       <Drawer
         anchor="left"
         open={drawerOpen}

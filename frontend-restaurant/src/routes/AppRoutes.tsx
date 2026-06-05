@@ -3,24 +3,15 @@ import { Routes, Route } from 'react-router-dom'
 import MainLayout from '../components/templates/MainLayout/MainLayout'
 import HomePage from '../pages/HomePage'
 import MenuPage from '../pages/MenuPage'
-import CartPage from '../pages/CartPage'
-import CheckoutPage from '../pages/CheckoutPage'
 import ApiTestPage from '../pages/ApiTestPage'
 import { PATHS } from './paths'
 
-/**
- * Alle Routen der App.
- * Jede Seite läuft im gemeinsamen MainLayout (Header/Footer).
- */
 function AppRoutes() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
         <Route path={PATHS.home} element={<HomePage />} />
         <Route path={PATHS.menu} element={<MenuPage />} />
-        <Route path={PATHS.cart} element={<CartPage />} />
-        <Route path={PATHS.checkout} element={<CheckoutPage />} />
-        {/* Teil 1: Testseite zur Prüfung der API-Anbindung (GET /menu) */}
         <Route path={PATHS.apiTest} element={<ApiTestPage />} />
       </Route>
     </Routes>

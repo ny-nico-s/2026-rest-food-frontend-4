@@ -48,9 +48,6 @@ function Footer() {
             <Link component={RouterLink} to={PATHS.menu} color="inherit" underline="hover">
               Menü
             </Link>
-            <Link component={RouterLink} to={PATHS.cart} color="inherit" underline="hover">
-              Warenkorb
-            </Link>
           </Stack>
         </Stack>
 
