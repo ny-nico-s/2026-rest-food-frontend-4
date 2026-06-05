@@ -1,8 +1,14 @@
-import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+import SectionTitle from '../components/atoms/SectionTitle/SectionTitle'
+import MenuList from '../components/organisms/MenuList/MenuList'
 
-/** Seite: Menü/Kategorien. Inhalt folgt in Teil 3. */
 function MenuPage() {
-  return <Typography variant="h4">Menü</Typography>
+  return (
+    <Stack spacing={3}>
+      <SectionTitle>Speisekarte</SectionTitle>
+      <MenuList />
+    </Stack>
+  )
 }
 
 export default MenuPage

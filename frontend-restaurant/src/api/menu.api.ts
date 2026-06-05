@@ -1,40 +1,62 @@
 import { apiClient } from './client'
 import type { MenuItem, MenuItemInput } from '../types/menu'
 
-/**
- * Alle Backend-Aufrufe rund um die Speisekarte (Endpoints laut PDF).
- * Diese Funktionen werden in den Seiten/Hooks verwendet, damit die
- * Komponenten selbst nichts über axios wissen müssen.
- */
+interface BackendMenu {
+  menuId?: string
+  name: string
+  description: string
+  price: number
+  category: string
+  imgUrl?: string
+  chefsChoice?: boolean
+}
 
-/** GET /menu – alle Gerichte holen. */
+function toMenuItem(menu: BackendMenu): MenuItem {
+  return {
+    id: menu.menuId ?? '',
+    name: menu.name,
+    description: menu.description,
+    price: menu.price,
+    category: menu.category,
+    imageUrl: menu.imgUrl ?? '',
+    chefsChoice: menu.chefsChoice ?? false,
+  }
+}
+
+function toBackendMenu(input: MenuItemInput): BackendMenu {
+  return {
+    name: input.name,
+    description: input.description,
+    price: input.price,
+    category: input.category,
+    imgUrl: input.imageUrl,
+    chefsChoice: input.chefsChoice,
+  }
+}
+
 export async function getMenu(): Promise<MenuItem[]> {
-  const response = await apiClient.get<MenuItem[]>('/menu')
-  return response.data
+  const response = await apiClient.get<BackendMenu[]>('/menus')
+  return response.data.map(toMenuItem)
 }
 
-/** GET /menu/{id} – ein einzelnes Gericht holen. */
 export async function getMenuItem(id: string): Promise<MenuItem> {
-  const response = await apiClient.get<MenuItem>(`/menu/${id}`)
-  return response.data
+  const response = await apiClient.get<BackendMenu>(`/menus/${id}`)
+  return toMenuItem(response.data)
 }
 
-/** POST /menu – neues Gericht anlegen. */
 export async function createMenuItem(data: MenuItemInput): Promise<MenuItem> {
-  const response = await apiClient.post<MenuItem>('/menu', data)
-  return response.data
+  const response = await apiClient.post<BackendMenu>('/menus', toBackendMenu(data))
+  return toMenuItem(response.data)
 }
 
-/** PUT /menu/{id} – bestehendes Gericht bearbeiten. */
 export async function updateMenuItem(
   id: string,
   data: MenuItemInput,
 ): Promise<MenuItem> {
-  const response = await apiClient.put<MenuItem>(`/menu/${id}`, data)
-  return response.data
+  const response = await apiClient.put<BackendMenu>(`/menus/${id}`, toBackendMenu(data))
+  return toMenuItem(response.data)
 }
 
-/** DELETE /menu/{id} – Gericht löschen. */
 export async function deleteMenuItem(id: string): Promise<void> {
-  await apiClient.delete(`/menu/${id}`)
+  await apiClient.delete(`/menus/${id}`)
 }
