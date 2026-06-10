@@ -2,6 +2,7 @@ export const PATHS = {
   home: '/',
   menu: '/menu',
   reservation: '/reservieren',
+  reservations: '/reservierungen',
   apiTest: '/api-test',
   login: '/login',
   register: '/register',

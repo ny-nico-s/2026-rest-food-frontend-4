@@ -71,3 +71,7 @@ export async function createReservation(
   )
   return toReservation(response.data)
 }
+
+export async function deleteReservation(id: string): Promise<void> {
+  await apiClient.delete(`/reservations/${id}`)
+}
