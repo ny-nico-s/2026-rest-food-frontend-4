@@ -48,6 +48,9 @@ function Footer() {
             <Link component={RouterLink} to={PATHS.menu} color="inherit" underline="hover">
               Menü
             </Link>
+            <Link component={RouterLink} to={PATHS.reservation} color="inherit" underline="hover">
+              Reservieren
+            </Link>
           </Stack>
         </Stack>
 
