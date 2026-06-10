@@ -1,8 +1,12 @@
+import { AuthProvider } from './context/AuthProvider'
 import AppRoutes from './routes/AppRoutes'
 
-/** Wurzel-Komponente. Rendert nur die Routen (Provider stehen in main.tsx). */
 function App() {
-  return <AppRoutes />
+  return (
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
+  )
 }
 
 export default App
