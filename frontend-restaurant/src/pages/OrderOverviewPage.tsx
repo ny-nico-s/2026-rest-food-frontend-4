@@ -6,28 +6,61 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
+import Snackbar from '@mui/material/Snackbar'
 import Typography from '@mui/material/Typography'
 import OrderTable from '../components/organisms/OrderTable/OrderTable'
 import { useFetch } from '../hooks/useFetch'
-import { getOrders } from '../api/orders.api'
+import { getOrders, updateOrderStatus } from '../api/orders.api'
 import { ORDER_STATUSES, ORDER_STATUS_LABELS } from '../types/order'
-import type { OrderStatus } from '../types/order'
+import type { Order, OrderStatus } from '../types/order'
 
 type StatusFilter = OrderStatus | 'ALL'
 
 export default function OrderOverviewPage() {
   const { data, loading, error } = useFetch(getOrders)
   const [filter, setFilter] = useState<StatusFilter>('ALL')
+  const [overrides, setOverrides] = useState<Record<string, OrderStatus>>({})
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
 
-  const filtered = useMemo(() => {
+  const orders = useMemo(() => {
     if (!data) {
       return []
     }
+    return data.map((order) =>
+      overrides[order.id]
+        ? { ...order, status: overrides[order.id] }
+        : order,
+    )
+  }, [data, overrides])
+
+  const filtered = useMemo(() => {
     if (filter === 'ALL') {
-      return data
+      return orders
     }
-    return data.filter((order) => order.status === filter)
-  }, [data, filter])
+    return orders.filter((order) => order.status === filter)
+  }, [orders, filter])
+
+  async function handleStatusChange(order: Order, status: OrderStatus) {
+    if (order.status === status) {
+      return
+    }
+    setUpdatingId(order.id)
+    setOverrides((prev) => ({ ...prev, [order.id]: status }))
+    try {
+      await updateOrderStatus(order.id, status)
+      setMessage('Status aktualisiert.')
+    } catch {
+      setOverrides((prev) => {
+        const next = { ...prev }
+        delete next[order.id]
+        return next
+      })
+      setMessage('Status konnte nicht geändert werden.')
+    } finally {
+      setUpdatingId(null)
+    }
+  }
 
   return (
     <Box>
@@ -69,7 +102,20 @@ export default function OrderOverviewPage() {
       {data && filtered.length === 0 && (
         <Alert severity="info">Keine Bestellungen vorhanden.</Alert>
       )}
-      {filtered.length > 0 && <OrderTable orders={filtered} />}
+      {filtered.length > 0 && (
+        <OrderTable
+          orders={filtered}
+          updatingId={updatingId}
+          onStatusChange={handleStatusChange}
+        />
+      )}
+
+      <Snackbar
+        open={message !== null}
+        autoHideDuration={4000}
+        onClose={() => setMessage(null)}
+        message={message ?? ''}
+      />
     </Box>
   )
 }

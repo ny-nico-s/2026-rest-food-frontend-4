@@ -7,10 +7,13 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import PriceTag from '../../atoms/PriceTag/PriceTag'
 import StatusBadge from '../../atoms/StatusBadge/StatusBadge'
-import type { Order } from '../../../types/order'
+import StatusSelect from '../../molecules/StatusSelect/StatusSelect'
+import type { Order, OrderStatus } from '../../../types/order'
 
 interface OrderTableProps {
   orders: Order[]
+  updatingId?: string | null
+  onStatusChange: (order: Order, status: OrderStatus) => void
 }
 
 function formatDate(value: string): string {
@@ -28,7 +31,11 @@ function countItems(order: Order): number {
   return order.items.reduce((sum, item) => sum + item.quantity, 0)
 }
 
-export default function OrderTable({ orders }: OrderTableProps) {
+export default function OrderTable({
+  orders,
+  updatingId = null,
+  onStatusChange,
+}: OrderTableProps) {
   return (
     <TableContainer component={Paper} variant="outlined">
       <Table>
@@ -40,6 +47,7 @@ export default function OrderTable({ orders }: OrderTableProps) {
             <TableCell align="right">Artikel</TableCell>
             <TableCell align="right">Summe</TableCell>
             <TableCell align="center">Status</TableCell>
+            <TableCell align="right">Status ändern</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -54,6 +62,13 @@ export default function OrderTable({ orders }: OrderTableProps) {
               </TableCell>
               <TableCell align="center">
                 <StatusBadge status={order.status} />
+              </TableCell>
+              <TableCell align="right">
+                <StatusSelect
+                  value={order.status}
+                  disabled={updatingId === order.id}
+                  onChange={(status) => onStatusChange(order, status)}
+                />
               </TableCell>
             </TableRow>
           ))}
