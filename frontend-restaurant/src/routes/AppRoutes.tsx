@@ -12,6 +12,7 @@ import AdminLayout from '../components/templates/AdminLayout/AdminLayout'
 import AdminDashboard from '../pages/AdminDashboard'
 import AdminComingSoon from '../pages/AdminComingSoon'
 import ProductManagementPage from '../pages/ProductManagementPage'
+import OrderOverviewPage from '../pages/OrderOverviewPage'
 import ProtectedRoute from './ProtectedRoute'
 import { PATHS } from './paths'
 
@@ -31,6 +32,7 @@ function AppRoutes() {
         <Route path={PATHS.admin} element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="products" element={<ProductManagementPage />} />
+          <Route path="orders" element={<OrderOverviewPage />} />
           <Route path="*" element={<AdminComingSoon />} />
         </Route>
       </Route>
