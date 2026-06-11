@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { getErrorMessage } from '../api/errors'
 
 /**
  * Ergebnis des useFetch-Hooks.
@@ -39,11 +40,7 @@ export function useFetch<T>(fetcher: () => Promise<T>): UseFetchResult<T> {
       const result = await fetcher()
       setData(result)
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Unbekannter Fehler beim Laden der Daten.',
-      )
+      setError(getErrorMessage(err))
     } finally {
       setLoading(false)
     }

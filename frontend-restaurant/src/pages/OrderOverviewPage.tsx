@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography'
 import OrderTable from '../components/organisms/OrderTable/OrderTable'
 import { useFetch } from '../hooks/useFetch'
 import { getOrders, updateOrderStatus } from '../api/orders.api'
+import { getErrorMessage } from '../api/errors'
 import { ORDER_STATUSES, ORDER_STATUS_LABELS } from '../types/order'
 import type { Order, OrderStatus } from '../types/order'
 
@@ -50,13 +51,13 @@ export default function OrderOverviewPage() {
     try {
       await updateOrderStatus(order.id, status)
       setMessage('Status aktualisiert.')
-    } catch {
+    } catch (err) {
       setOverrides((prev) => {
         const next = { ...prev }
         delete next[order.id]
         return next
       })
-      setMessage('Status konnte nicht geändert werden.')
+      setMessage(`Status konnte nicht geändert werden: ${getErrorMessage(err)}`)
     } finally {
       setUpdatingId(null)
     }

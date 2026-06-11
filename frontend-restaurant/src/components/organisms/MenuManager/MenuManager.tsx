@@ -15,6 +15,7 @@ import {
   updateMenuItem,
   deleteMenuItem,
 } from '../../../api/menu.api'
+import { getErrorMessage } from '../../../api/errors'
 import type { MenuItem, MenuItemInput } from '../../../types/menu'
 
 export default function MenuManager() {
@@ -57,8 +58,8 @@ export default function MenuManager() {
       }
       closeForm()
       refetch()
-    } catch {
-      setMessage('Speichern fehlgeschlagen.')
+    } catch (err) {
+      setMessage(`Speichern fehlgeschlagen: ${getErrorMessage(err)}`)
     } finally {
       setSaving(false)
     }
@@ -74,8 +75,8 @@ export default function MenuManager() {
       setMessage('Gericht gelöscht.')
       setDeleteTarget(null)
       refetch()
-    } catch {
-      setMessage('Löschen fehlgeschlagen.')
+    } catch (err) {
+      setMessage(`Löschen fehlgeschlagen: ${getErrorMessage(err)}`)
     } finally {
       setDeleting(false)
     }
