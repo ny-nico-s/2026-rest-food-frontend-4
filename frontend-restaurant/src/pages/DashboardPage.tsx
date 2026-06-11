@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack'
 import SectionTitle from '../components/atoms/SectionTitle/SectionTitle'
 import DashboardLogin from '../components/molecules/DashboardLogin/DashboardLogin'
 import ReservationList from '../components/organisms/ReservationList/ReservationList'
+import MenuManager from '../components/organisms/MenuManager/MenuManager'
 
 const DASHBOARD_KEY = 'dashboard_unlocked'
 
@@ -24,6 +25,8 @@ function DashboardPage() {
     <Stack spacing={3}>
       <SectionTitle>Reservierungen</SectionTitle>
       <ReservationList />
+      <SectionTitle>Menü</SectionTitle>
+      <MenuManager />
     </Stack>
   )
 }
