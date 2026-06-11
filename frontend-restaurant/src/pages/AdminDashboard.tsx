@@ -3,9 +3,11 @@ import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import { Link as RouterLink } from 'react-router-dom'
+import MenuManager from '../components/organisms/MenuManager/MenuManager'
 import { useAuth } from '../hooks/useAuth'
 import { PATHS } from '../routes/paths'
 
@@ -59,6 +61,16 @@ export default function AdminDashboard() {
           </Card>
         ))}
       </Box>
+
+      <Divider sx={{ my: 4 }} />
+
+      <Typography variant="h5" gutterBottom>
+        Menü anpassen
+      </Typography>
+      <Typography color="text.secondary" sx={{ mb: 3 }}>
+        Gerichte direkt hier anlegen, bearbeiten oder löschen.
+      </Typography>
+      <MenuManager />
     </Box>
   )
 }
