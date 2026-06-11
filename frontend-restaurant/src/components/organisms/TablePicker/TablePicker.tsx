@@ -41,7 +41,11 @@ function TablePicker({ start, end, selectedId, onSelect }: TablePickerProps) {
     return <Alert severity="error">Tische konnten nicht geladen werden: {error}</Alert>
   }
 
-  const list = tables ?? []
+  const list = [...(tables ?? [])].sort(
+    (a, b) =>
+      (a.tableNumber ?? Number.MAX_SAFE_INTEGER) -
+        (b.tableNumber ?? Number.MAX_SAFE_INTEGER) || a.id.localeCompare(b.id),
+  )
 
   return (
     <Box>

@@ -69,7 +69,11 @@ function TableManager() {
     }
   }
 
-  const tables = data ?? []
+  const tables = [...(data ?? [])].sort(
+    (a, b) =>
+      (a.tableNumber ?? Number.MAX_SAFE_INTEGER) -
+        (b.tableNumber ?? Number.MAX_SAFE_INTEGER) || a.id.localeCompare(b.id),
+  )
 
   return (
     <Box>
