@@ -3,6 +3,7 @@ import type {
   Reservation,
   ReservationInput,
   RestaurantTable,
+  TableInput,
 } from '../types/reservation'
 
 type BackendReservation = {
@@ -56,9 +57,34 @@ function toTable(b: BackendTable): RestaurantTable {
   }
 }
 
+function toBackendTable(input: TableInput) {
+  const body: Record<string, number> = { numSeats: input.numSeats }
+  if (input.tableNumber !== undefined) {
+    body.tableNumber = input.tableNumber
+  }
+  return body
+}
+
 export async function getTables(): Promise<RestaurantTable[]> {
   const response = await apiClient.get<BackendTable[]>('/tables')
   return response.data.map(toTable)
+}
+
+export async function createTable(input: TableInput): Promise<RestaurantTable> {
+  const response = await apiClient.post<BackendTable>('/tables', toBackendTable(input))
+  return toTable(response.data)
+}
+
+export async function updateTable(
+  id: string,
+  input: TableInput,
+): Promise<RestaurantTable> {
+  const response = await apiClient.put<BackendTable>(`/tables/${id}`, toBackendTable(input))
+  return toTable(response.data)
+}
+
+export async function deleteTable(id: string): Promise<void> {
+  await apiClient.delete(`/tables/${id}`)
 }
 
 export async function getReservations(): Promise<Reservation[]> {

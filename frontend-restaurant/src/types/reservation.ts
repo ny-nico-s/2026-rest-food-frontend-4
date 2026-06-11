@@ -4,6 +4,11 @@ export interface RestaurantTable {
   tableNumber?: number
 }
 
+export type TableInput = {
+  numSeats: number
+  tableNumber?: number
+}
+
 export interface Reservation {
   id: string
   start: string

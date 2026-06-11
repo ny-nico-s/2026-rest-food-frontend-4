@@ -4,6 +4,7 @@ import SectionTitle from '../components/atoms/SectionTitle/SectionTitle'
 import DashboardLogin from '../components/molecules/DashboardLogin/DashboardLogin'
 import ReservationList from '../components/organisms/ReservationList/ReservationList'
 import MenuManager from '../components/organisms/MenuManager/MenuManager'
+import TableManager from '../components/organisms/TableManager/TableManager'
 
 const DASHBOARD_KEY = 'dashboard_unlocked'
 
@@ -27,6 +28,8 @@ function DashboardPage() {
       <ReservationList />
       <SectionTitle>Menü</SectionTitle>
       <MenuManager />
+      <SectionTitle>Tische</SectionTitle>
+      <TableManager />
     </Stack>
   )
 }
