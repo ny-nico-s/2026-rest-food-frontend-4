@@ -26,6 +26,10 @@ export default function MenuManager() {
   const [deleting, setDeleting] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
 
+  const categories = data
+    ? Array.from(new Set(data.map((item) => item.category))).filter(Boolean)
+    : []
+
   function openCreate() {
     setEditing(null)
     setFormOpen(true)
@@ -104,6 +108,7 @@ export default function MenuManager() {
         key={editing?.id ?? 'new'}
         open={formOpen}
         initialValue={editing}
+        categories={categories}
         loading={saving}
         onSubmit={handleSubmit}
         onClose={closeForm}

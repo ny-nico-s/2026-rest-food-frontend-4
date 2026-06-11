@@ -7,12 +7,15 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
 import FormTextField from '../../molecules/FormTextField/FormTextField'
 import type { MenuItem, MenuItemInput } from '../../../types/menu'
 
 interface ProductFormDialogProps {
   open: boolean
   initialValue: MenuItem | null
+  categories?: string[]
   loading?: boolean
   onSubmit: (data: MenuItemInput) => void
   onClose: () => void
@@ -51,6 +54,7 @@ function buildInitialState(item: MenuItem | null): FormState {
 export default function ProductFormDialog({
   open,
   initialValue,
+  categories = [],
   loading = false,
   onSubmit,
   onClose,
@@ -97,11 +101,26 @@ export default function ProductFormDialog({
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             required
           />
-          <FormTextField
-            label="Kategorie"
+          <Autocomplete
+            freeSolo
+            fullWidth
+            options={categories}
             value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-            required
+            onChange={(_, newValue) =>
+              setForm({ ...form, category: newValue ?? '' })
+            }
+            onInputChange={(_, newValue) =>
+              setForm({ ...form, category: newValue })
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Kategorie"
+                margin="normal"
+                required
+                helperText="Vorhandene Kategorie wählen oder neue eingeben"
+              />
+            )}
           />
           <FormTextField
             label="Bild-URL"
