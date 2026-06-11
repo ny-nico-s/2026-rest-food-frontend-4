@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import SectionTitle from '../components/atoms/SectionTitle/SectionTitle'
 import DashboardLogin from '../components/molecules/DashboardLogin/DashboardLogin'
-import ReservationForm from '../components/organisms/ReservationForm/ReservationForm'
 import ReservationList from '../components/organisms/ReservationList/ReservationList'
 
 const DASHBOARD_KEY = 'dashboard_unlocked'
@@ -23,15 +21,9 @@ function DashboardPage() {
   }
 
   return (
-    <Stack spacing={6}>
-      <Box>
-        <SectionTitle>Tisch reservieren</SectionTitle>
-        <ReservationForm />
-      </Box>
-      <Box>
-        <SectionTitle>Reservierungen</SectionTitle>
-        <ReservationList />
-      </Box>
+    <Stack spacing={3}>
+      <SectionTitle>Reservierungen</SectionTitle>
+      <ReservationList />
     </Stack>
   )
 }
