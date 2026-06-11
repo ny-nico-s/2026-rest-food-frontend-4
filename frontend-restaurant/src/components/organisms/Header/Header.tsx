@@ -59,12 +59,6 @@ function Header() {
             <ListItemButton component={RouterLink} to={PATHS.menu}>
               <ListItemText primary="Menü" />
             </ListItemButton>
-            <ListItemButton component={RouterLink} to={PATHS.reservation}>
-              <ListItemText primary="Reservieren" />
-            </ListItemButton>
-            <ListItemButton component={RouterLink} to={PATHS.reservations}>
-              <ListItemText primary="Reservierungen" />
-            </ListItemButton>
           </List>
         </Box>
       </Drawer>

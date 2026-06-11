@@ -12,8 +12,6 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { label: 'Home', to: PATHS.home },
   { label: 'Menü', to: PATHS.menu },
-  { label: 'Reservieren', to: PATHS.reservation },
-  { label: 'Reservierungen', to: PATHS.reservations },
 ]
 
 /**
