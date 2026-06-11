@@ -39,6 +39,7 @@ function toBackendReservation(input: ReservationInput) {
     start: input.start,
     end: input.end,
     numerOfPeople: input.numberOfPeople,
+    numberOfPeople: input.numberOfPeople,
     reserveeLastName: input.reserveeLastName,
     reserveePhoneNumber: input.reserveePhoneNumber,
   }
