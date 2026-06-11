@@ -1,7 +1,7 @@
 export interface RestaurantTable {
   id: string
-  tableNumber: number
   numSeats: number
+  tableNumber?: number
 }
 
 export interface Reservation {
@@ -11,6 +11,7 @@ export interface Reservation {
   numberOfPeople: number
   reserveeLastName: string
   reserveePhoneNumber: string
+  tableIds: string[]
 }
 
 export type ReservationInput = Omit<Reservation, 'id'>

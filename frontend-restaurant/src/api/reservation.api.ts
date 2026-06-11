@@ -14,12 +14,13 @@ type BackendReservation = {
   numberOfPeople?: number
   reserveeLastName: string
   reserveePhoneNumber: string
+  tables?: { id?: string }[]
 }
 
 type BackendTable = {
   id?: string
   tableId?: string
-  tableNumber: number
+  tableNumber?: number
   numSeats: number
 }
 
@@ -31,6 +32,7 @@ function toReservation(b: BackendReservation): Reservation {
     numberOfPeople: b.numberOfPeople ?? b.numerOfPeople ?? 0,
     reserveeLastName: b.reserveeLastName,
     reserveePhoneNumber: b.reserveePhoneNumber,
+    tableIds: (b.tables ?? []).map((t) => t.id ?? '').filter(Boolean),
   }
 }
 
@@ -42,14 +44,15 @@ function toBackendReservation(input: ReservationInput) {
     numberOfPeople: input.numberOfPeople,
     reserveeLastName: input.reserveeLastName,
     reserveePhoneNumber: input.reserveePhoneNumber,
+    tables: input.tableIds.map((id) => ({ id })),
   }
 }
 
 function toTable(b: BackendTable): RestaurantTable {
   return {
     id: b.tableId ?? b.id ?? '',
-    tableNumber: b.tableNumber,
     numSeats: b.numSeats,
+    tableNumber: b.tableNumber,
   }
 }
 

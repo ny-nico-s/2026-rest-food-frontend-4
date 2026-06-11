@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import { createReservation } from '../../../api/reservation.api'
+import TablePicker from '../TablePicker/TablePicker'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -28,10 +29,14 @@ function ReservationForm() {
   const [people, setPeople] = useState(2)
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
+  const [tableId, setTableId] = useState('')
   const [status, setStatus] = useState<Status>('idle')
   const [message, setMessage] = useState('')
 
   const selected = date && time ? new Date(`${date}T${time}`) : null
+  const endDate = selected
+    ? new Date(selected.getTime() + RESERVATION_HOURS * 60 * 60 * 1000)
+    : null
   const preview = selected
     ? `${selected.toLocaleDateString('de-DE', {
         weekday: 'long',
@@ -46,10 +51,13 @@ function ReservationForm() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-    if (!selected) return
+    if (!selected || !endDate) return
 
-    const end = new Date(selected)
-    end.setHours(end.getHours() + RESERVATION_HOURS)
+    if (!tableId) {
+      setStatus('error')
+      setMessage('Bitte einen Tisch auswählen.')
+      return
+    }
 
     setStatus('submitting')
     setMessage('')
@@ -59,7 +67,8 @@ function ReservationForm() {
         reserveePhoneNumber: phone,
         numberOfPeople: people,
         start: toLocalDateTime(selected),
-        end: toLocalDateTime(end),
+        end: toLocalDateTime(endDate),
+        tableIds: [tableId],
       })
       setStatus('success')
       setMessage(`Reservierung für ${lastName} bestätigt.`)
@@ -68,6 +77,7 @@ function ReservationForm() {
       setPeople(2)
       setDate('')
       setTime('')
+      setTableId('')
     } catch (err) {
       setStatus('error')
       setMessage(
@@ -127,6 +137,13 @@ function ReservationForm() {
             Reservierung am {preview}
           </Typography>
         )}
+
+        <TablePicker
+          start={selected ? toLocalDateTime(selected) : null}
+          end={endDate ? toLocalDateTime(endDate) : null}
+          selectedId={tableId}
+          onSelect={setTableId}
+        />
 
         <Button
           type="submit"
