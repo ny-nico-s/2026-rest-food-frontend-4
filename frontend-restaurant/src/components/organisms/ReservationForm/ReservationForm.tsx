@@ -59,6 +59,12 @@ function ReservationForm() {
       return
     }
 
+    if (people < 1 || people > 8) {
+      setStatus('error')
+      setMessage('Es können maximal 8 Personen reserviert werden.')
+      return
+    }
+
     setStatus('submitting')
     setMessage('')
     try {
@@ -112,7 +118,8 @@ function ReservationForm() {
           type="number"
           value={people}
           onChange={(e) => setPeople(Number(e.target.value))}
-          slotProps={{ htmlInput: { min: 1 } }}
+          slotProps={{ htmlInput: { min: 1, max: 8 } }}
+          helperText="Maximal 8 Personen"
           required
         />
         <TextField
