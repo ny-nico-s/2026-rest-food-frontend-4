@@ -9,6 +9,8 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import type { RestaurantTable, TableInput } from '../../../types/reservation'
 
+const MAX_SEATS = 12
+
 type TableFormDialogProps = {
   open: boolean
   table: RestaurantTable | null
@@ -19,21 +21,22 @@ type TableFormDialogProps = {
 
 function TableFormDialog({ open, table, saving, onClose, onSave }: TableFormDialogProps) {
   const [numSeats, setNumSeats] = useState(2)
-  const [tableNumber, setTableNumber] = useState('')
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (open) {
       setNumSeats(table?.numSeats ?? 2)
-      setTableNumber(table?.tableNumber != null ? String(table.tableNumber) : '')
+      setError('')
     }
   }, [open, table])
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
-    onSave({
-      numSeats,
-      tableNumber: tableNumber === '' ? undefined : Number(tableNumber),
-    })
+    if (numSeats < 1 || numSeats > MAX_SEATS) {
+      setError(`Ein Tisch kann 1 bis ${MAX_SEATS} Plätze haben.`)
+      return
+    }
+    onSave({ numSeats })
   }
 
   return (
@@ -43,18 +46,13 @@ function TableFormDialog({ open, table, saving, onClose, onSave }: TableFormDial
         <DialogContent>
           <Stack spacing={3} sx={{ mt: 1 }}>
             <TextField
-              label="Tischnummer (optional)"
-              type="number"
-              value={tableNumber}
-              onChange={(e) => setTableNumber(e.target.value)}
-              slotProps={{ htmlInput: { min: 1 } }}
-            />
-            <TextField
               label="Anzahl Plätze"
               type="number"
               value={numSeats}
               onChange={(e) => setNumSeats(Number(e.target.value))}
-              slotProps={{ htmlInput: { min: 1 } }}
+              slotProps={{ htmlInput: { min: 1, max: MAX_SEATS } }}
+              error={Boolean(error)}
+              helperText={error || `Maximal ${MAX_SEATS} Plätze`}
               required
             />
           </Stack>
