@@ -93,6 +93,7 @@ export default function ProductFormDialog({
             onChange={(e) => setForm({ ...form, description: e.target.value })}
             multiline
             minRows={2}
+            required
           />
           <FormTextField
             label="Preis (€)"
