@@ -1,47 +1,16 @@
-import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
-import { getTables, getReservations } from '../../../api/reservation.api'
-import { useFetch } from '../../../hooks/useFetch'
+import type { RestaurantTable } from '../../../types/reservation'
 
 type TablePickerProps = {
-  start: string | null
-  end: string | null
+  tables: RestaurantTable[]
+  occupied: Set<string>
   selectedId: string
   onSelect: (id: string) => void
 }
 
-function TablePicker({ start, end, selectedId, onSelect }: TablePickerProps) {
-  const { data: tables, loading, error } = useFetch(getTables)
-  const { data: reservations } = useFetch(getReservations)
-
-  const occupied = new Set<string>()
-  if (start && end && reservations) {
-    const s = new Date(start).getTime()
-    const e = new Date(end).getTime()
-    for (const reservation of reservations) {
-      const rs = new Date(reservation.start).getTime()
-      const re = new Date(reservation.end).getTime()
-      if (s < re && rs < e) {
-        reservation.tableIds.forEach((id) => occupied.add(id))
-      }
-    }
-  }
-
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
-        <CircularProgress />
-      </Box>
-    )
-  }
-
-  if (error) {
-    return <Alert severity="error">Tische konnten nicht geladen werden: {error}</Alert>
-  }
-
-  const list = [...(tables ?? [])].sort(
+function TablePicker({ tables, occupied, selectedId, onSelect }: TablePickerProps) {
+  const list = [...tables].sort(
     (a, b) =>
       (a.tableNumber ?? Number.MAX_SAFE_INTEGER) -
         (b.tableNumber ?? Number.MAX_SAFE_INTEGER) || a.id.localeCompare(b.id),

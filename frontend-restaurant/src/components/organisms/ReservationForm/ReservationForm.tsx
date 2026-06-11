@@ -5,12 +5,18 @@ import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import { createReservation } from '../../../api/reservation.api'
+import {
+  createReservation,
+  getTables,
+  getReservations,
+} from '../../../api/reservation.api'
+import { useFetch } from '../../../hooks/useFetch'
 import TablePicker from '../TablePicker/TablePicker'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
 const RESERVATION_HOURS = 2
+const MAX_PEOPLE = 8
 
 function pad(value: number): string {
   return String(value).padStart(2, '0')
@@ -24,6 +30,9 @@ function toLocalDateTime(date: Date): string {
 }
 
 function ReservationForm() {
+  const { data: tables } = useFetch(getTables)
+  const { data: reservations, refetch: refetchReservations } = useFetch(getReservations)
+
   const [lastName, setLastName] = useState('')
   const [phone, setPhone] = useState('')
   const [people, setPeople] = useState(2)
@@ -37,6 +46,7 @@ function ReservationForm() {
   const endDate = selected
     ? new Date(selected.getTime() + RESERVATION_HOURS * 60 * 60 * 1000)
     : null
+
   const preview = selected
     ? `${selected.toLocaleDateString('de-DE', {
         weekday: 'long',
@@ -49,9 +59,28 @@ function ReservationForm() {
       })} Uhr`
     : ''
 
+  const occupied = new Set<string>()
+  if (selected && endDate && reservations) {
+    const s = selected.getTime()
+    const e = endDate.getTime()
+    for (const reservation of reservations) {
+      const rs = new Date(reservation.start).getTime()
+      const re = new Date(reservation.end).getTime()
+      if (s < re && rs < e) {
+        reservation.tableIds.forEach((id) => occupied.add(id))
+      }
+    }
+  }
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     if (!selected || !endDate) return
+
+    if (people < 1 || people > MAX_PEOPLE) {
+      setStatus('error')
+      setMessage(`Es können maximal ${MAX_PEOPLE} Personen reserviert werden.`)
+      return
+    }
 
     if (!tableId) {
       setStatus('error')
@@ -59,9 +88,9 @@ function ReservationForm() {
       return
     }
 
-    if (people < 1 || people > 8) {
+    if (occupied.has(tableId)) {
       setStatus('error')
-      setMessage('Es können maximal 8 Personen reserviert werden.')
+      setMessage('Dieser Tisch ist zur gewählten Zeit bereits belegt.')
       return
     }
 
@@ -84,6 +113,7 @@ function ReservationForm() {
       setDate('')
       setTime('')
       setTableId('')
+      refetchReservations()
     } catch (err) {
       setStatus('error')
       setMessage(
@@ -118,8 +148,8 @@ function ReservationForm() {
           type="number"
           value={people}
           onChange={(e) => setPeople(Number(e.target.value))}
-          slotProps={{ htmlInput: { min: 1, max: 8 } }}
-          helperText="Maximal 8 Personen"
+          slotProps={{ htmlInput: { min: 1, max: MAX_PEOPLE } }}
+          helperText={`Maximal ${MAX_PEOPLE} Personen`}
           required
         />
         <TextField
@@ -146,8 +176,8 @@ function ReservationForm() {
         )}
 
         <TablePicker
-          start={selected ? toLocalDateTime(selected) : null}
-          end={endDate ? toLocalDateTime(endDate) : null}
+          tables={tables ?? []}
+          occupied={occupied}
           selectedId={tableId}
           onSelect={setTableId}
         />
