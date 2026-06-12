@@ -29,6 +29,23 @@ function toLocalDateTime(date: Date): string {
   )
 }
 
+function formatSwissPhone(raw: string): string {
+  let value = raw.replace(/[^\d+]/g, '')
+  if (value.startsWith('+41')) {
+    value = '0' + value.slice(3)
+  } else if (value.startsWith('0041')) {
+    value = '0' + value.slice(4)
+  }
+  const digits = value.replace(/\D/g, '').slice(0, 10)
+  const groups = [
+    digits.slice(0, 3),
+    digits.slice(3, 6),
+    digits.slice(6, 8),
+    digits.slice(8, 10),
+  ].filter((group) => group !== '')
+  return groups.join(' ')
+}
+
 function ReservationForm() {
   const { data: tables } = useFetch(getTables)
   const { data: reservations, refetch: refetchReservations } = useFetch(getReservations)
@@ -140,7 +157,8 @@ function ReservationForm() {
           label="Telefonnummer"
           type="tel"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => setPhone(formatSwissPhone(e.target.value))}
+          placeholder="079 123 45 67"
           required
         />
         <TextField
