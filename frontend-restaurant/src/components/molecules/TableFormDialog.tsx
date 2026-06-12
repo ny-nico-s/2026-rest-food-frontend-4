@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import type { RestaurantTable, TableInput } from '../../types/reservation'
 
-const MAX_SEATS = 12
+const MAX_SEATS = 8
 
 type TableFormDialogProps = {
   open: boolean
